@@ -231,19 +231,31 @@
                         contentType: "application/json",
                         data: JSON.stringify({ listingId }),
                         success: function (res) {
-                            if (res.status) $icon.removeClass("text-secondary").addClass("text-danger");
+                            if (res.status) {
+                                $icon.removeClass("text-secondary").addClass("text-danger");
+                                showToast("İlan favorilere eklendi", "success");
+                            } else {
+                                showToast(res.message, "error");
+                            }
                         }
                     });
-                } else {
+                }
+                else {
                     $.ajax({
                         url: apiBaseUrl + "/Favorite/" + listingId,
                         method: "DELETE",
                         headers: { "Authorization": "Bearer " + token },
                         success: function (res) {
-                            if (res.status) $icon.removeClass("text-danger").addClass("text-secondary");
+                            if (res.status) {
+                                $icon.removeClass("text-danger").addClass("text-secondary");
+                                showToast("İlan favorilerden çıkarıldı", "error");
+                            } else {
+                                showToast(res.message, "error");
+                            }
                         }
                     });
                 }
+
             });
 
             $("#btnFilter").click(function () {
@@ -264,5 +276,17 @@
                 getListings();
             });
         });
+        function showToast(message, type = "success") {
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: type === "success" ? "#198754" : "#dc3545",
+                stopOnFocus: true,
+                className: "rounded shadow-sm px-3 py-2"
+            }).showToast();
+        }
+
     </script>
 }
