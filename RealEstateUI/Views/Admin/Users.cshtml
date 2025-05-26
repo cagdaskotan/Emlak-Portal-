@@ -1,0 +1,253 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Kullanıcılar";
+}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-header text-white fw-bold bg-gradient rounded-top" style="background: linear-gradient(135deg, #0d6efd, #6610f2);">
+                Kullanıcı Listesi
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-hover align-middle rounded" id="userTable">
+                    <thead>
+                        <tr>
+                            <th>Fotoğraf</th>
+                            <th>Ad Soyad</th>
+                            <th>Kullanıcı Adı</th>
+                            <th>Telefon</th>
+                            <th>Rol</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-header text-white fw-bold bg-gradient rounded-top" style="background: linear-gradient(135deg, #198754, #20c997);">
+                <strong id="formHeader">Kullanıcı Ekle</strong>
+            </div>
+            <div class="card-body">
+                <input type="hidden" id="userId" />
+                <input type="hidden" id="oldPhotoPath" />
+                <div class="mb-3">
+                    <label>Ad Soyad</label>
+                    <input type="text" id="fullName" class="form-control shadow-sm rounded-3" />
+                </div>
+                <div class="mb-3">
+                    <label>Kullanıcı Adı</label>
+                    <input type="text" id="userName" class="form-control shadow-sm rounded-3" />
+                </div>
+                <div class="mb-3">
+                    <label>E-posta</label>
+                    <input type="email" id="email" class="form-control shadow-sm rounded-3" />
+                </div>
+                <div class="mb-3">
+                    <label>Telefon</label>
+                    <input type="text" id="phoneNumber" class="form-control shadow-sm rounded-3" />
+                </div>
+                <div class="mb-3" id="roleGroup" style="display:none;">
+                    <label>Rol</label>
+                    <select id="role" class="form-select rounded-pill px-3 py-2 shadow-sm border border-secondary">
+                        <option value="Uye">Üye</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label>Profil Fotoğrafı</label>
+                    <input type="file" id="userPhoto" class="form-control shadow-sm rounded-3" />
+                </div>
+                <div class="mb-3" id="passwordGroup">
+                    <label>Şifre</label>
+                    <input type="password" id="password" class="form-control shadow-sm rounded-3" placeholder="Yeni kullanıcılar için zorunlu" />
+                </div>
+
+                <div class="mb-3 d-flex justify-content-start gap-2">
+                    <button class="btn btn-success btn-sm px-3 py-2" id="btnSave">Yeni Kullanıcı Ekle</button>
+                    <button class="btn btn-primary btn-sm px-3 py-2" id="btnUpdate" style="display:none; margin-right:2px;">Güncelle</button>
+                    <button class="btn btn-secondary btn-sm px-3 py-2" id="btnCancel" style="display:none;">Vazgeç</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const apiBaseUrl = "@ViewBag.ApiBaseURL";
+        const token = localStorage.getItem("token");
+
+        $(document).ready(function () {
+            loadUsers();
+
+            function loadUsers() {
+                $.ajax({
+                    url: apiBaseUrl + "/User/List",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (data) {
+                        let rows = "";
+                        data.forEach(user => {
+                            const photo = user.userPhoto || "/UserPhotos/user.png";
+                            rows += `
+                                        <tr>
+                                            <td><img src="${photo}" class="rounded-circle border" width="40" height="40" style="object-fit: cover;" /></td>
+                                            <td>${user.fullName}</td>
+                                            <td>${user.userName}</td>
+                                            <td>${user.phoneNumber}</td>
+                                            <td>${user.role === "Uye" ? "Üye" : user.role}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary btnEdit" data-id="${user.id}"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger btnDelete" data-id="${user.id}"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>`;
+                        });
+                        $("#userTable tbody").html(rows);
+                    }
+                });
+            }
+
+            $(document).on("click", ".btnEdit", function () {
+                const id = $(this).data("id");
+                $.ajax({
+                    url: apiBaseUrl + "/User/GetById/" + id,
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (user) {
+                        $("#formHeader").text("Kullanıcı Düzenle");
+                        $("#roleGroup").show();
+                        $("#userId").val(user.id);
+                        $("#userName").val(user.userName);
+                        $("#fullName").val(user.fullName);
+                        $("#email").val(user.email);
+                        $("#phoneNumber").val(user.phoneNumber);
+                        $("#role").val(user.role);
+                        $("#passwordGroup").hide();
+
+
+                        const pathOnly = user.userPhoto?.replace(location.origin, "") || "/UserPhotos/user.png";
+                        $("#oldPhotoPath").val(pathOnly);
+
+                        $("#btnSave").hide();
+                        $("#btnUpdate, #btnCancel").show();
+                    }
+                });
+            });
+
+            $(document).on("click", ".btnDelete", function () {
+                const id = $(this).data("id");
+                if (!confirm("Bu kullanıcı silinsin mi?")) return;
+
+                $.ajax({
+                    url: apiBaseUrl + "/User/Delete/" + id,
+                    method: "DELETE",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (res) {
+                        showMessage(res.status, res.message);
+                        if (res.status) loadUsers();
+                    }
+                });
+            });
+
+            $("#btnUpdate").click(function () {
+                const formData = new FormData();
+                formData.append("Id", $("#userId").val());
+                formData.append("UserName", $("#userName").val());
+                formData.append("Email", $("#email").val());
+                formData.append("FullName", $("#fullName").val());
+                formData.append("PhoneNumber", $("#phoneNumber").val());
+                formData.append("Role", $("#role").val());
+                formData.append("UserPhoto", $("#oldPhotoPath").val());
+
+                const photoFile = $('#userPhoto')[0].files[0];
+                if (photoFile) {
+                    formData.append("userPhoto", photoFile);
+                }
+
+                $.ajax({
+                    url: apiBaseUrl + "/User/Update",
+                    method: "PUT",
+                    headers: { "Authorization": "Bearer " + token },
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function (res) {
+                        showMessage(res.status, res.message);
+                        if (res.status) {
+                            resetForm();
+                            loadUsers();
+                        }
+                    },
+                    error: function () {
+                        showMessage(false, "Güncelleme sırasında hata oluştu.");
+                    }
+                });
+            });
+
+            $("#btnSave").click(function () {
+                const password = $("#password").val();
+                if (!password) return showMessage(false, "Şifre gereklidir!");
+
+                const formData = new FormData();
+                formData.append("UserName", $("#userName").val());
+                formData.append("Email", $("#email").val());
+                formData.append("FullName", $("#fullName").val());
+                formData.append("PhoneNumber", $("#phoneNumber").val());
+                formData.append("Password", password);
+
+                const photoFile = $('#userPhoto')[0].files[0];
+                if (photoFile) {
+                    formData.append("userPhoto", photoFile);
+                }
+
+                $.ajax({
+                    url: apiBaseUrl + "/User/Register",
+                    method: "POST",
+                    headers: { "Authorization": "Bearer " + token },
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function (res) {
+                        showMessage(res.status, res.message);
+                        if (res.status) {
+                            resetForm();
+                            loadUsers();
+                        }
+                    },
+                    error: function (xhr) {
+                        showMessage(false, xhr.responseText);
+                    }
+                });
+            });
+
+            $("#btnCancel").click(function () {
+                resetForm();
+            });
+
+            function resetForm() {
+                $("#formHeader").text("Kullanıcı Ekle");
+                $("#userId, #userName, #email, #fullName, #phoneNumber, #password").val("");
+                $("#oldPhotoPath").val("");
+                $("#btnSave").show();
+                $("#btnUpdate, #btnCancel").hide();
+                $("#roleGroup").hide();
+                $("#passwordGroup").show();
+            }
+
+            function showMessage(status, message) {
+                Toastify({
+                    text: message,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: status ? "#28a745" : "#dc3545",
+                    stopOnFocus: true,
+                    className: "rounded shadow-sm px-3 py-2"
+                }).showToast();
+            }
+
+        });
+    </script>
+}

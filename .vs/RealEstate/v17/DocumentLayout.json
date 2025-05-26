@@ -1,0 +1,396 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\admin\\users.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\admin\\users.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\admin\\listings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\admin\\listings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\admin\\categories.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\admin\\categories.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\shared\\_layoutadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\shared\\_layoutadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\home\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\home\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\home\\listingsrent.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\home\\listingsrent.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\home\\listingssale.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\home\\listingssale.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\home\\listingsall.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\home\\listingsall.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\home\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\home\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44012A65-2E1E-4792-8E27-1B1C35C6C2A1}|RealEstateApi\\RealEstateApi.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateapi\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44012A65-2E1E-4792-8E27-1B1C35C6C2A1}|RealEstateApi\\RealEstateApi.csproj|solutionrelative:realestateapi\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44012A65-2E1E-4792-8E27-1B1C35C6C2A1}|RealEstateApi\\RealEstateApi.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateapi\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44012A65-2E1E-4792-8E27-1B1C35C6C2A1}|RealEstateApi\\RealEstateApi.csproj|solutionrelative:realestateapi\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44012A65-2E1E-4792-8E27-1B1C35C6C2A1}|RealEstateApi\\RealEstateApi.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateapi\\controllers\\favoritecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44012A65-2E1E-4792-8E27-1B1C35C6C2A1}|RealEstateApi\\RealEstateApi.csproj|solutionrelative:realestateapi\\controllers\\favoritecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44012A65-2E1E-4792-8E27-1B1C35C6C2A1}|RealEstateApi\\RealEstateApi.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateapi\\controllers\\listingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44012A65-2E1E-4792-8E27-1B1C35C6C2A1}|RealEstateApi\\RealEstateApi.csproj|solutionrelative:realestateapi\\controllers\\listingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\home\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\home\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\views\\home\\favorites.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\views\\home\\favorites.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateui\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{3AE12176-09EA-4637-AF11-4AFA31F687F7}|RealEstateUI\\RealEstateUI.csproj|solutionrelative:realestateui\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44012A65-2E1E-4792-8E27-1B1C35C6C2A1}|RealEstateApi\\RealEstateApi.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateapi\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44012A65-2E1E-4792-8E27-1B1C35C6C2A1}|RealEstateApi\\RealEstateApi.csproj|solutionrelative:realestateapi\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44012A65-2E1E-4792-8E27-1B1C35C6C2A1}|RealEstateApi\\RealEstateApi.csproj|c:\\users\\cagda\\onedrive\\masa\u00FCst\u00FC\\realestate\\realestateapi\\dtos\\userupdatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44012A65-2E1E-4792-8E27-1B1C35C6C2A1}|RealEstateApi\\RealEstateApi.csproj|solutionrelative:realestateapi\\dtos\\userupdatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 11,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "FavoriteController.cs",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateApi\\Controllers\\FavoriteController.cs",
+              "RelativeDocumentMoniker": "RealEstateApi\\Controllers\\FavoriteController.cs",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateApi\\Controllers\\FavoriteController.cs",
+              "RelativeToolTip": "RealEstateApi\\Controllers\\FavoriteController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-25T18:01:54.178Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ListingController.cs",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateApi\\Controllers\\ListingController.cs",
+              "RelativeDocumentMoniker": "RealEstateApi\\Controllers\\ListingController.cs",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateApi\\Controllers\\ListingController.cs",
+              "RelativeToolTip": "RealEstateApi\\Controllers\\ListingController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-25T17:59:58.369Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CategoryController.cs",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateApi\\Controllers\\CategoryController.cs",
+              "RelativeDocumentMoniker": "RealEstateApi\\Controllers\\CategoryController.cs",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateApi\\Controllers\\CategoryController.cs",
+              "RelativeToolTip": "RealEstateApi\\Controllers\\CategoryController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-24T11:13:35.178Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Admin\\Index.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Admin\\Index.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Admin\\Index.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Admin\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-24T11:07:12.051Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Favorites.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\Favorites.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Home\\Favorites.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\Favorites.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Home\\Favorites.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-24T11:05:46.675Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ListingsAll.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\ListingsAll.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Home\\ListingsAll.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\ListingsAll.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Home\\ListingsAll.cshtml",
+              "ViewState": "AgIAAI0AAAAAAAAAAAAcwAwBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-24T11:05:33.369Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ListingsRent.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\ListingsRent.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Home\\ListingsRent.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\ListingsRent.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Home\\ListingsRent.cshtml",
+              "ViewState": "AgIAACQAAAAAAAAAAAAowEIAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-24T11:05:19.064Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ListingsSale.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\ListingsSale.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Home\\ListingsSale.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\ListingsSale.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Home\\ListingsSale.cshtml",
+              "ViewState": "AgIAAMwAAAAAAAAAAAAcwOUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-24T11:05:06.507Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\Register.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Home\\Register.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\Register.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Home\\Register.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-24T11:04:41.763Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAABMAAAAAAAAAAAD4vy8AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-24T10:46:01.252Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Profile.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\Profile.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Home\\Profile.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\Profile.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Home\\Profile.cshtml",
+              "ViewState": "AgIAACMAAAAAAAAAAADwvzYAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-24T10:43:51.172Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Users.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Admin\\Users.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Admin\\Users.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Admin\\Users.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Admin\\Users.cshtml",
+              "ViewState": "AgIAANQAAAAAAAAAAAAIwOsAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-24T10:27:14.146Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Listings.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Admin\\Listings.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Admin\\Listings.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Admin\\Listings.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Admin\\Listings.cshtml",
+              "ViewState": "AgIAAEsBAAAAAAAAAAAIwGsBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-24T10:26:29.486Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\Details.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Home\\Details.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\Details.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Home\\Details.cshtml",
+              "ViewState": "AgIAAKUAAAAAAAAAAAD4v7kAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-24T08:33:54.011Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-24T08:21:50.855Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Categories.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Admin\\Categories.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Admin\\Categories.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Admin\\Categories.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Admin\\Categories.cshtml",
+              "ViewState": "AgIAALkAAAAAAAAAAAD4v9cAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-23T18:29:25.638Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\appsettings.json",
+              "RelativeDocumentMoniker": "RealEstateUI\\appsettings.json",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\appsettings.json",
+              "RelativeToolTip": "RealEstateUI\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-05-19T17:16:51.642Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "RealEstateUI\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "RealEstateUI\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAkwB4AAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T17:16:32.752Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateApi\\Models\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "RealEstateApi\\Models\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateApi\\Models\\AppDbContext.cs",
+              "RelativeToolTip": "RealEstateApi\\Models\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-28T11:44:06.901Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "_LayoutAdmin.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Shared\\_LayoutAdmin.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Shared\\_LayoutAdmin.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Shared\\_LayoutAdmin.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Shared\\_LayoutAdmin.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-26T19:05:12.688Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\Login.cshtml",
+              "RelativeDocumentMoniker": "RealEstateUI\\Views\\Home\\Login.cshtml",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateUI\\Views\\Home\\Login.cshtml",
+              "RelativeToolTip": "RealEstateUI\\Views\\Home\\Login.cshtml",
+              "ViewState": "AgIAADAAAAAAAAAAAAAAAD8AAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-26T18:33:42.383Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "UserUpdateDto.cs",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateApi\\DTOs\\UserUpdateDto.cs",
+              "RelativeDocumentMoniker": "RealEstateApi\\DTOs\\UserUpdateDto.cs",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateApi\\DTOs\\UserUpdateDto.cs",
+              "RelativeToolTip": "RealEstateApi\\DTOs\\UserUpdateDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-26T17:07:19.191Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateApi\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "RealEstateApi\\Controllers\\UserController.cs",
+              "ToolTip": "C:\\Users\\cagda\\OneDrive\\Masa\u00FCst\u00FC\\RealEstate\\RealEstateApi\\Controllers\\UserController.cs",
+              "RelativeToolTip": "RealEstateApi\\Controllers\\UserController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-26T16:15:16.37Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,220 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Profil";
+
+}
+<style>
+    .profile-card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        background-color: #ffffff;
+        transition: all 0.3s ease;
+    }
+
+        .profile-card .card-header {
+            background: linear-gradient(90deg, #198754, #0d6efd);
+            color: white;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            font-size: 1.3rem;
+            padding: 1rem;
+        }
+
+        .profile-card img {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s ease;
+        }
+
+            .profile-card img:hover {
+                transform: scale(1.05);
+            }
+
+        .profile-card .btn {
+            border-radius: 30px;
+        }
+
+        .profile-card input[type="text"],
+        .profile-card input[type="email"],
+        .profile-card input[type="file"] {
+            border-radius: 8px;
+        }
+
+        .profile-card .form-label {
+            font-weight: 600;
+        }
+
+    #divResult {
+        margin-top: 10px;
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card mb-4 profile-card">
+            <div class="card-header text-center fw-bold">Profilim</div>
+
+            <!-- Profil Görüntüleme -->
+            <div class="card-body text-center" id="viewProfile">
+                <img id="displayPhoto" src="" class="rounded-circle mb-3 border" width="100" height="100" style="object-fit: cover;" />
+                <h5 id="displayFullName"></h5>
+                <p id="displayUserName" class="text-muted"></p>
+                <p id="displayEmail"></p>
+                <p id="displayPhoneNumber"></p>
+                <p><span class="badge bg-secondary" id="displayRole"></span></p>
+                <button class="btn btn-primary" id="btnEdit">Düzenle</button>
+            </div>
+
+            <!-- Profil Düzenleme -->
+            <div class="card-body d-none" id="editProfile">
+                <input type="hidden" id="userId" />
+                <input type="hidden" id="oldPhotoPath" />
+
+                <div class="text-center mb-3">
+                    <img id="previewPhoto" src="/UserPhotos/user.png" class="rounded-circle border" width="100" height="100" style="object-fit: cover;" />
+                </div>
+
+                <div class="mb-3">
+                    <label>Ad Soyad</label>
+                    <input type="text" id="fullName" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label>Kullanıcı Adı</label>
+                    <input type="text" id="userName" class="form-control" readonly />
+                </div>
+                <div class="mb-3">
+                    <label>E-posta</label>
+                    <input type="email" id="email" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label>Telefon</label>
+                    <input type="text" id="phoneNumber" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label>Profil Fotoğrafı</label>
+                    <input type="file" id="userPhoto" class="form-control" accept="image/*" />
+                </div>
+
+                <div class="mb-3 d-flex gap-2">
+                    <button class="btn btn-primary w-50" id="btnUpdate">Güncelle</button>
+                    <button class="btn btn-secondary w-50" id="btnCancel">Vazgeç</button>
+                </div>
+
+                <div id="divResult"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const apiBaseUrl = "@ViewBag.ApiBaseURL";
+        const token = localStorage.getItem("token");
+        const userName = localStorage.getItem("userName");
+
+        $(document).ready(function () {
+            getProfile();
+
+            function getProfile() {
+                $.ajax({
+                    url: apiBaseUrl + "/User/List",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (users) {
+                        const user = users.find(u => u.userName === userName);
+                        if (!user) return;
+
+                        const photo = user.userPhoto || "/UserPhotos/user.png";
+                        $("#displayPhoto").attr("src", photo);
+                        $("#previewPhoto").attr("src", photo);
+
+                        $("#displayFullName").text(user.fullName);
+                        $("#displayUserName").text(user.userName);
+                        $("#displayEmail").text(user.email);
+                        $("#displayPhoneNumber").text(user.phoneNumber);
+                        $("#displayRole").text(user.role);
+
+                        $("#userId").val(user.id);
+                        $("#userName").val(user.userName);
+                        $("#fullName").val(user.fullName);
+                        $("#email").val(user.email);
+                        $("#phoneNumber").val(user.phoneNumber);
+
+                        const pathOnly = user.userPhoto?.replace(location.origin, "") || "/UserPhotos/user.png";
+                        $("#oldPhotoPath").val(pathOnly);
+
+                        localStorage.setItem("userId", user.id);
+                    }
+                });
+            }
+
+            $("#btnEdit").click(function () {
+                $("#viewProfile").addClass("d-none");
+                $("#editProfile").removeClass("d-none");
+            });
+
+            $("#btnCancel").click(function () {
+                $("#editProfile").addClass("d-none");
+                $("#viewProfile").removeClass("d-none");
+            });
+
+            $("#userPhoto").change(function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#previewPhoto").attr("src", e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            $("#btnUpdate").click(function () {
+                const formData = new FormData();
+                formData.append("Id", localStorage.getItem("userId"));
+                formData.append("UserName", $("#userName").val());
+                formData.append("FullName", $("#fullName").val());
+                formData.append("Email", $("#email").val());
+                formData.append("PhoneNumber", $("#phoneNumber").val());
+                formData.append("UserPhoto", $("#oldPhotoPath").val());
+
+                const file = $('#userPhoto')[0].files[0];
+                if (file) {
+                    formData.append("userPhoto", file);
+                }
+
+                $.ajax({
+                    url: apiBaseUrl + "/User/UpdateProfile",
+                    method: "POST",
+                    headers: { "Authorization": "Bearer " + token },
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function (res) {
+                        showMessage(res.status, res.message);
+                        if (res.status) {
+                            $("#editProfile").addClass("d-none");
+                            $("#viewProfile").removeClass("d-none");
+                            getProfile();
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error("HATA:", xhr);
+                        showMessage(false, "Hata: " + xhr.statusText + " - " + xhr.responseText);
+                    }
+                });
+            });
+
+            function showMessage(status, message) {
+                const css = status ? "alert alert-success" : "alert alert-danger";
+                $("#divResult")
+                    .removeClass()
+                    .addClass(css)
+                    .html(message)
+                    .fadeIn()
+                    .delay(3000)
+                    .fadeOut();
+            }
+        });
+    </script>
+}

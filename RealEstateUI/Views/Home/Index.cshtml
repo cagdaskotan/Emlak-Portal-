@@ -1,0 +1,196 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Anasayfa";
+}
+
+<!-- Ana Sayfa Banner -->
+<section class="py-5 text-center mb-5" style="background: linear-gradient(135deg, #007bff, #20c997); color: white; border-radius: 32px;">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3">Hayalinizdeki Evi Bulun</h1>
+        <p class="lead">En çok beğenilen ilanlar burada sizi bekliyor. Hemen keşfedin!</p>
+        <a href="/Home/ListingsAll" class="btn btn-light btn-lg mt-3 shadow-sm px-4" id="ilanbtn">İlanlara Göz At</a>
+    </div>
+</section>
+<!-- Neden Bizi Tercih Etmelisiniz -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Neden Bizi Tercih Etmelisiniz?</h2>
+            <p class="text-muted">Emlak alanında profesyonel ve kullanıcı dostu hizmetler sunuyoruz.</p>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="p-4 shadow-sm rounded-4 bg-white h-100">
+                    <i class="fas fa-map-marked-alt fa-2x text-primary mb-3"></i>
+                    <h5 class="fw-semibold">Geniş İlan Ağı</h5>
+                    <p class="text-muted small">Yüzlerce satılık ve kiralık ilan arasından dilediğinizi seçin.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="p-4 shadow-sm rounded-4 bg-white h-100">
+                    <i class="fas fa-handshake fa-2x text-success mb-3"></i>
+                    <h5 class="fw-semibold">Güvenli Alım-Satım</h5>
+                    <p class="text-muted small">Tüm işlemler güvenli altyapı ile korunur ve denetlenir.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="p-4 shadow-sm rounded-4 bg-white h-100">
+                    <i class="fas fa-clock fa-2x text-warning mb-3"></i>
+                    <h5 class="fw-semibold">7/24 Erişim</h5>
+                    <p class="text-muted small">İstediğiniz zaman ilan ekleyebilir, güncelleyebilir veya favorilere alabilirsiniz.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Favori İlanlar -->
+<div class="text-center my-4">
+    <h2 class="fw-bold d-inline-block px-4 py-2 rounded-pill shadow-sm" style="background-color: #f0f0f0;">
+        Favori İlanlar
+    </h2>
+</div>
+
+<div class="container">
+    <div id="sliderWrapper" class="position-relative overflow-hidden rounded">
+        <div class="d-flex transition" id="favoritesSlider">
+            <!-- Dinamik slider içeriği buraya gelecek -->
+        </div>
+    </div>
+</div>
+
+<!-- Hızlı Erişim Kartları -->
+<div class="container my-5">
+    <div class="row text-center">
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm border-0 rounded-4 p-4">
+                <i class="fas fa-list-alt fa-2x text-primary mb-3"></i>
+                <h5 class="fw-bold mb-2">Tüm İlanları Gör</h5>
+                <p class="text-muted small">Satılık ve kiralık tüm ilanları görüntüleyin.</p>
+                <a href="/Home/ListingsAll" class="btn btn-outline-primary btn-sm mt-2">Görüntüle</a>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm border-0 rounded-4 p-4">
+                <i class="fas fa-heart fa-2x text-danger mb-3"></i>
+                <h5 class="fw-bold mb-2">Favorilerini Yönet</h5>
+                <p class="text-muted small">Beğendiğiniz ilanları kolayca yönetin.</p>
+                <a href="/Home/Favorites" class="btn btn-outline-danger btn-sm mt-2">Favorilerim</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const apiBaseUrl = "@ViewBag.ApiBaseURL";
+            const token = localStorage.getItem("token");
+
+            $.ajax({
+                url: apiBaseUrl + "/Favorite/MostFavoritedListings",
+                method: "GET",
+                headers: { "Authorization": "Bearer " + token },
+                success: function (data) {
+                    const listings = data.slice(0, 10); // En fazla 10 ilan
+                    renderSlider(listings);
+                    if (listings.length > 4) startSlider(listings.length);
+                },
+                error: function () {
+                    $("#favoritesSlider").html("<p class='text-center w-100'>Veri yüklenemedi.</p>");
+                }
+            });
+
+            function renderSlider(listings) {
+                const html = listings.map(item => {
+                    const imageUrl = item.images?.length > 0
+                        ? item.images[0].imageUrl
+                        : 'https://via.placeholder.com/300x200';
+
+                    const badgeColor = item.category?.name?.toLowerCase() === 'kiralık' ? 'primary' : 'success';
+                    const badgeText = item.category?.name || 'Kategori';
+                    const city = item.city?.name || 'Şehir Bilinmiyor';
+
+                    const description = item.description?.length > 12
+                        ? item.description.substring(0, 12) + '...'
+                        : item.description;
+
+                    return `
+                            <div class="card me-3 shadow-sm border-0 rounded-4" style="min-width: 300px; max-width: 300px; transition: transform 0.3s ease;">
+                            <img src="${imageUrl}" class="card-img-top" style="aspect-ratio: 16/9; object-fit: cover;">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge bg-${badgeColor}">${badgeText}</span>
+                                    <small class="text-muted">${city}</small>
+                                </div>
+                                <h5 class="card-title text-truncate" title="${item.title}">${item.title}</h5>
+                                <p class="card-text text-muted small">${description}</p>
+                                <a href="/Home/Details?id=${item.id}" class="btn btn-sm btn-outline-primary w-100">Detaylar</a>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                $("#favoritesSlider").html(html);
+                const totalWidth = 320 * listings.length; // 300 + margin
+                $("#favoritesSlider").css("width", totalWidth + "px");
+
+            }
+
+            function startSlider(itemCount) {
+                const slider = document.getElementById("favoritesSlider");
+                const slideWidth = 320;
+                let offset = 0;
+
+                setInterval(() => {
+                    offset -= slideWidth;
+                    const maxOffset = slideWidth * (itemCount - 1);
+
+                    if (Math.abs(offset) > maxOffset) {
+                        slider.style.transition = "none";
+                        offset = 0;
+                        slider.style.transform = `translateX(${offset}px)`;
+                    } else {
+                        slider.style.transition = "transform 0.8s ease";
+                        slider.style.transform = `translateX(${offset}px)`;
+                    }
+                }, 4000);
+            }
+
+        });
+    </script>
+
+    <style>
+        #sliderWrapper {
+            height: auto;
+            white-space: nowrap;
+            overflow: hidden;
+            margin-top: 30px;
+            padding: 10px;
+            border-radius: 24px;
+            background-color: #f8f9fa;
+        }
+
+        #ilanbtn:hover {
+            background-color:lightgray;
+        }
+
+        #favoritesSlider {
+            display: flex;
+            transition: transform 0.8s ease;
+            will-change: transform;
+        }
+
+
+        .card-img-top {
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+
+        #favoritesSlider .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+    </style>
+}

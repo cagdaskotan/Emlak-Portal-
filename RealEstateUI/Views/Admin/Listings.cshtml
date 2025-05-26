@@ -1,0 +1,405 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "İlanlar";
+}
+
+<style>
+    #listingTable th {
+        background-color: #f8f9fa;
+    }
+
+    #listingTable td, #listingTable th {
+        vertical-align: middle;
+    }
+</style>
+
+<!-- İlanlar Sayfası -->
+<div class="row">
+    <div class="col-md-8" id="divList">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-header bg-gradient text-white fw-bold rounded-top" style="background: linear-gradient(135deg, #0d6efd, #6610f2);">
+                İlanlarım
+            </div>
+            <div class="card-body">
+                <table class="table table-striped" id="listingTable">
+                    <thead>
+                        <tr>
+                            <th>Başlık</th>
+                            <th>Fiyat</th>
+                            <th>Kategori</th>
+                            <th>Şehir</th>
+                            <th>Görseller</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4" id="divAddUpdate">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-header bg-light border-bottom-0">
+                <strong id="formHeader" class="fs-5">İlan Ekle</strong>
+            </div>
+            <div class="card-body">
+                <input type="hidden" id="txtId" />
+                <div class="mb-3">
+                    <label>Başlık</label>
+                    <input type="text" class="form-control shadow-sm rounded-3" id="txtTitle" />
+                </div>
+                <div class="mb-3">
+                    <label>Açıklama</label>
+                    <textarea class="form-control shadow-sm rounded-3" id="txtDescription" rows="4"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label>Fiyat</label>
+                    <input type="number" class="form-control" id="txtPrice" />
+                </div>
+                <div class="mb-3">
+                    <label>Kategori</label>
+                    <select class="form-control" id="ddlCategory"></select>
+                </div>
+                <div class="mb-3">
+                    <label>Şehir</label>
+                    <select class="form-control" id="ddlCity"></select>
+                </div>
+                <div class="mb-3">
+                    <label>Adres</label>
+                    <input type="text" class="form-control shadow-sm rounded-3" id="txtAddress" />
+                </div>
+                <div class="mb-3">
+                    <label>Görseller</label>
+                    <input type="file" class="form-control shadow-sm rounded-3" id="fileImage" multiple />
+                </div>
+                <div class="mb-3" id="previewContainer" style="display:none;"></div>
+                <div class="mb-3 d-flex justify-content-start gap-2">
+                    <button class="btn btn-success btn-sm" id="btnSave">Yeni İlan Ekle</button>
+                    <button class="btn btn-primary btn-sm" id="btnUpdate" style="display:none; margin-right:2px;">Güncelle</button>
+                    <button class="btn btn-secondary btn-sm" id="btnCancel" style="display:none;">Vazgeç</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Silme Onay Modalı -->
+    <div class="modal fade" id="deleteListingModal" tabindex="-1" aria-labelledby="deleteListingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 shadow-sm">
+                <div class="modal-header bg-light border-bottom-0">
+                    <h5 class="modal-title fw-bold" id="deleteListingModalLabel">Silme Onayı</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bu ilanı silmek istediğinize emin misiniz?</p>
+                    <input type="hidden" id="deleteListingId" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmDeleteListing"><i class="fas fa-trash me-1"></i> Sil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        let selectedFiles = [];
+
+        $(document).ready(function () {
+            const apiBaseUrl = "@ViewBag.ApiBaseURL";
+            const token = localStorage.getItem("token");
+
+            if (!token) return location.href = "/Login";
+
+            GetListings();
+            GetCategories();
+            GetCities();
+
+            function GetListings() {
+                $.ajax({
+                    url: apiBaseUrl + "/Listing",
+                    type: "GET",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (data) {
+                        let rows = "";
+                        data.forEach(function (item) {
+                            let imagesHtml = "";
+                            if (item.images?.length > 0) {
+                                item.images.forEach(img => {
+                                    imagesHtml += `<img src="${img.imageUrl}" width="60" class="m-1 rounded border" />`;
+                                });
+                            }
+                            rows += `<tr>
+                                    <td>${item.title}</td>
+                                    <td>${item.price} ₺</td>
+                                    <td>${item.category?.name || ''}</td>
+                                    <td>${item.city?.name || ''}</td>
+                                    <td>${imagesHtml}</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm btnEdit" data-id="${item.id}"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-danger btn-sm btnDelete" data-id="${item.id}"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>`;
+                        });
+                        $("#listingTable tbody").html(rows);
+                    }
+                });
+            }
+
+            function GetCategories() {
+                $.ajax({
+                    url: apiBaseUrl + "/Category",
+                    type: "GET",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (data) {
+                        let options = "";
+                        data.forEach(item => {
+                            options += `<option value="${item.id}">${item.name}</option>`;
+                        });
+                        $("#ddlCategory").html(options);
+                    }
+                });
+            }
+
+            function GetCities() {
+                $.ajax({
+                    url: apiBaseUrl + "/City",
+                    type: "GET",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (data) {
+                        let options = "";
+                        data.forEach(item => {
+                            options += `<option value="${item.id}">${item.name}</option>`;
+                        });
+                        $("#ddlCity").html(options);
+                    }
+                });
+            }
+
+            $("#fileImage").change(function () {
+                const newFiles = Array.from(this.files);
+                newFiles.forEach(file => selectedFiles.push(file));
+                RenderImagePreviews();
+                this.value = "";
+            });
+
+            function RenderImagePreviews() {
+                $("#previewContainer").html("").show();
+                selectedFiles.forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const html = `
+                                <div class="d-inline-block position-relative m-1" style="width: 100px; height: 100px;">
+                                    <img src="${e.target.result}" class="img-thumbnail w-100 h-100" style="object-fit: cover;" />
+                                    <button class="btn btn-sm btn-danger position-absolute delete-image-new"
+                                            data-index="${index}" title="Kaldır"
+                                            style="top: 4px; right: 4px; border-radius: 50%; width: 22px; height: 22px; padding: 0; line-height: 1;">
+                                        &times;
+                                    </button>
+                                </div>`;
+                        $("#previewContainer").append(html);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            $(document).on("click", ".delete-image-new", function () {
+                const index = $(this).data("index");
+                selectedFiles.splice(index, 1);
+                RenderImagePreviews();
+            });
+
+            $("#btnSave").click(function () {
+                const formData = new FormData();
+                formData.append("Title", $("#txtTitle").val());
+                formData.append("Description", $("#txtDescription").val());
+                formData.append("Price", $("#txtPrice").val());
+                formData.append("CategoryId", $("#ddlCategory").val());
+                formData.append("CityId", $("#ddlCity").val());
+                formData.append("Address", $("#txtAddress").val());
+
+                selectedFiles.forEach(file => formData.append("Files", file));
+
+                $.ajax({
+                    url: apiBaseUrl + "/Listing",
+                    type: "POST",
+                    headers: { "Authorization": "Bearer " + token },
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        ShowResult(res.status, res.message);
+                        if (res.status) {
+                            GetListings();
+                            ResetForm();
+                        }
+                    }
+                });
+            });
+
+            $("#btnUpdate").click(function () {
+                const formData = new FormData();
+                formData.append("Id", $("#txtId").val());
+                formData.append("Title", $("#txtTitle").val());
+                formData.append("Description", $("#txtDescription").val());
+                formData.append("Price", $("#txtPrice").val());
+                formData.append("CategoryId", $("#ddlCategory").val());
+                formData.append("CityId", $("#ddlCity").val());
+                formData.append("Address", $("#txtAddress").val());
+
+                selectedFiles.forEach(file => formData.append("Files", file));
+
+                $.ajax({
+                    url: apiBaseUrl + "/Listing",
+                    type: "PUT",
+                    headers: { "Authorization": "Bearer " + token },
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        ShowResult(res.status, res.message);
+                        if (res.status) {
+                            GetListings();
+                            ResetForm();
+                        }
+                    }
+                });
+            });
+
+            $(document).on("click", ".btnEdit", function () {
+                const id = $(this).data("id");
+                $.ajax({
+                    url: apiBaseUrl + "/Listing",
+                    type: "GET",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (data) {
+                        const listing = data.find(x => x.id == id);
+                        if (listing) {
+                            $("#formTitle").text("İlan Güncelle");
+                            $("#btnSave").hide();
+                            $("#btnUpdate").show();
+                            $("#btnCancel").show();
+                            $("#txtId").val(listing.id);
+                            $("#txtTitle").val(listing.title);
+                            $("#txtDescription").val(listing.description);
+                            $("#txtPrice").val(listing.price);
+                            $("#ddlCategory").val(listing.categoryId);
+                            $("#ddlCity").val(listing.cityId);
+                            $("#txtAddress").val(listing.address);
+
+                            let existingImagesHtml = "";
+                            if (listing.images?.length > 0) {
+                                listing.images.forEach(img => {
+                                    existingImagesHtml += `
+                                            <div class="d-inline-block position-relative m-1" style="width: 100px; height: 100px;">
+                                                <img src="${img.imageUrl}" class="img-thumbnail w-100 h-100" style="object-fit: cover;" />
+                                                <button class="btn btn-sm btn-danger position-absolute delete-image"
+                                                        data-id="${img.id}" title="Sil"
+                                                        style="top: 4px; right: 4px; border-radius: 50%; width: 22px; height: 22px; padding: 0; line-height: 1;">
+                                                    &times;
+                                                </button>
+                                            </div>`;
+                                });
+                            }
+
+                            $("#previewContainer").html(existingImagesHtml).show();
+                            $("#fileImage").val("");
+                            selectedFiles = []; // sıfırla
+                        }
+                    }
+                });
+            });
+
+            $(document).on("click", ".delete-image", function () {
+                const imageId = $(this).data("id");
+                if (!confirm("Bu görseli silmek istiyor musunuz?")) return;
+
+                $.ajax({
+                    url: apiBaseUrl + "/Listing/DeleteImage/" + imageId,
+                    type: "DELETE",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (res) {
+                        if (res.status) {
+                            GetListings();
+
+                            const deleteModal = bootstrap.Modal.getInstance(document.getElementById("deleteListingModal"))
+                                || new bootstrap.Modal(document.getElementById("deleteListingModal"));
+                            deleteModal.hide();
+                        } else {
+                            alert(res.message);
+                        }
+                    }.bind(this)
+                });
+            });
+
+            $(document).on("click", ".btnDelete", function () {
+                const id = $(this).data("id");
+                $("#deleteListingId").val(id);
+                window.deleteModalInstance = new bootstrap.Modal(document.getElementById("deleteListingModal"));
+                deleteModalInstance.show();
+
+            });
+            $("#btnConfirmDeleteListing").click(function () {
+                const id = $("#deleteListingId").val();
+
+                $.ajax({
+                    url: apiBaseUrl + "/Listing/" + id,
+                    type: "DELETE",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (res) {
+                        // Silme başarılıysa da kırmızı (error) arka plan göster
+                        showToast(res.message, "error");
+
+                        if (res.status) {
+                            GetListings();
+
+                            if (window.deleteModalInstance) {
+                                window.deleteModalInstance.hide();
+                            }
+                        }
+                    }
+
+                });
+            });
+
+
+
+
+            $("#btnCancel").click(function () {
+                ResetForm();
+            });
+
+            function ResetForm() {
+                $("#formTitle").text("İlan Ekle");
+                $("#btnSave").show();
+                $("#btnUpdate").hide();
+                $("#btnCancel").hide();
+                $("#txtId, #txtTitle, #txtDescription, #txtPrice, #txtAddress").val("");
+                $("#ddlCategory, #ddlCity").val("");
+                $("#fileImage").val("");
+                $("#previewContainer").html("").hide();
+                selectedFiles = [];
+            }
+
+            function showToast(message, type = "success") {
+                Toastify({
+                    text: message,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: type === "success" ? "#28a745" : "#dc3545",
+                    stopOnFocus: true,
+                    className: "rounded"
+                }).showToast();
+            }
+
+            function ShowResult(status, message) {
+                showToast(message, status ? "success" : "error");
+            }
+
+        });
+    </script>
+}

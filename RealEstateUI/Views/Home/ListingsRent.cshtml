@@ -1,0 +1,277 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Kiralık İlanlar";
+}
+<style>
+    .filter-card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+        background-color: #ffffff;
+    }
+
+        .filter-card .card-header {
+            background: linear-gradient(135deg, #0d6efd, #198754);
+            color: white;
+            font-weight: 600;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+
+        .filter-card .form-label {
+            font-weight: 500;
+        }
+
+        .filter-card .form-control,
+        .filter-card .form-select {
+            border-radius: 8px;
+        }
+
+        .filter-card .btn {
+            border-radius: 30px;
+        }
+
+    .listing-card {
+        border-radius: 16px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+    }
+
+        .listing-card .card-img-top {
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            object-fit: cover;
+            aspect-ratio: 16/9;
+        }
+
+        .listing-card .card-body {
+            padding: 1rem;
+        }
+
+    .favorite-btn {
+        font-size: 1.2rem;
+    }
+
+        .favorite-btn:hover {
+            transform: scale(1.2);
+            transition: 0.2s;
+        }
+
+    .btn-outline-primary {
+        border-radius: 30px;
+    }
+
+    .text-truncate {
+        max-width: 85%;
+    }
+</style>
+<h1 class="text-center mb-5 fw-bold">Kiralık İlanlar</h1>
+
+<div class="container">
+    <div class="row">
+        <!-- Sol: Filtre -->
+        <div class="col-md-3">
+            <div class="card mb-4 filter-card shadow-sm border-0 rounded-4">
+                <div class="card-header fw-bold">Filtrele</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label>🔍 Kelime Arama</label>
+                        <input type="text" id="searchKeyword" class="form-control" placeholder="İlan başlığı..." />
+                    </div>
+                    <div class="mb-3">
+                        <label>📍 Şehir</label>
+                        <select id="filterCity" class="form-select"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label>💸 Fiyat Aralığı</label>
+                        <div class="d-flex">
+                            <input type="number" id="minPrice" class="form-control me-2" placeholder="Min" />
+                            <input type="number" id="maxPrice" class="form-control" placeholder="Max" />
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-primary w-100 me-1" id="btnFilter">Filtrele</button>
+                        <button class="btn btn-secondary w-100 ms-1" id="btnReset">Sıfırla</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sağ: İlanlar -->
+        <div class="col-md-9">
+            <div class="row" id="listingsContainer">
+                <!-- Kiralık ilanlar burada listelenecek -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const apiBaseUrl = "@ViewBag.ApiBaseURL";
+            const token = localStorage.getItem("token");
+
+            getCities();
+            getListings();
+
+            function getCities() {
+                $.ajax({
+                    url: apiBaseUrl + "/City",
+                    method: "GET",
+                    success: function (cities) {
+                        let options = `<option value="">Tümü</option>`;
+                        cities.forEach(city => {
+                            options += `<option value="${city.name}">${city.name}</option>`;
+                        });
+                        $("#filterCity").html(options);
+                    }
+                });
+            }
+
+            function getListings(filters = {}) {
+                $.ajax({
+                    url: apiBaseUrl + "/Listing/Public",
+                    method: "GET",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (listings) {
+                        listings = listings.filter(x => x.category?.name?.toLowerCase() === "kiralık");
+
+                        if (filters.keyword) {
+                            listings = listings.filter(x => x.title.toLowerCase().includes(filters.keyword.toLowerCase()));
+                        }
+                        if (filters.city) {
+                            listings = listings.filter(x => x.city?.name?.toLowerCase() === filters.city.toLowerCase());
+                        }
+                        if (filters.minPrice) {
+                            listings = listings.filter(x => x.price >= filters.minPrice);
+                        }
+                        if (filters.maxPrice) {
+                            listings = listings.filter(x => x.price <= filters.maxPrice);
+                        }
+
+                        $.ajax({
+                            url: apiBaseUrl + "/Favorite",
+                            method: "GET",
+                            headers: { "Authorization": "Bearer " + token },
+                            success: function (favorites) {
+                                renderListings(listings, favorites);
+                            },
+                            error: function () {
+                                renderListings(listings, []);
+                            }
+                        });
+                    },
+                    error: function () {
+                        $("#listingsContainer").html('<div class="alert alert-danger">İlanlar yüklenirken hata oluştu.</div>');
+                    }
+                });
+            }
+
+            function renderListings(data, favorites) {
+                let html = "";
+
+                data.forEach(item => {
+                    const isFavorite = favorites.some(f => f.listingId === item.id);
+                    const heartIcon = isFavorite ? "text-danger" : "text-secondary";
+
+                    const imageSlides = item.images?.length > 0
+                        ? item.images.map((img, index) => `
+                        <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                            <img src="${img.imageUrl}" class="d-block w-100 card-img-top" />
+                        </div>`).join('')
+                        : `<div class="carousel-item active">
+                            <img src="https://via.placeholder.com/400x300?text=No+Image" class="d-block w-100 card-img-top" />
+                        </div>`;
+
+                    const sliderControls = item.images?.length > 1
+                        ? `<button class="carousel-control-prev" type="button" data-bs-target="#carousel-${item.id}" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel-${item.id}" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>`
+                        : "";
+
+                    html += `
+                <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
+                    <div class="card shadow-sm border-0 listing-card">
+                        <div class="overflow-hidden">
+                            <div id="carousel-${item.id}" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">${imageSlides}</div>
+                                ${sliderControls}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0 text-truncate" title="${item.title}">${item.title}</h5>
+                                <i class="fas fa-heart favorite-btn ${heartIcon}" data-id="${item.id}" style="cursor:pointer;"></i>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-2 mb-2">
+                                <span class="badge bg-primary">Kiralık</span>
+                                <span class="text-muted fw-bold">${item.price} ₺</span>
+                            </div>
+                            <p class="mb-1 text-muted small"><strong>${item.city?.name || 'Belirtilmemiş'}</strong></p>
+                            <p class="card-text text-muted small">${item.description.substring(0, 100)}...</p>
+                            <a href="/Home/Details?id=${item.id}" class="btn btn-outline-primary btn-sm w-100 mt-2">Detaylar</a>
+                        </div>
+                    </div>
+                </div>`;
+                });
+
+                $("#listingsContainer").html(html || `<div class="alert alert-warning text-center">Kiralık ilan bulunamadı.</div>`);
+            }
+
+
+            $("#btnFilter").click(function () {
+                const filters = {
+                    keyword: $("#searchKeyword").val().trim(),
+                    city: $("#filterCity").val(),
+                    minPrice: parseFloat($("#minPrice").val()) || 0,
+                    maxPrice: parseFloat($("#maxPrice").val()) || Infinity
+                };
+                getListings(filters);
+            });
+
+            $("#btnReset").click(function () {
+                $("#searchKeyword, #minPrice, #maxPrice").val("");
+                $("#filterCity").val("");
+                getListings();
+            });
+
+            $(document).on("click", ".favorite-btn", function () {
+                if (!token) return alert("Favorilere eklemek için giriş yapmalısınız.");
+
+                const listingId = $(this).data("id");
+                const $icon = $(this);
+                const isFav = $icon.hasClass("text-danger");
+
+                if (!isFav) {
+                    $.ajax({
+                        url: apiBaseUrl + "/Favorite/Add",
+                        method: "POST",
+                        headers: { "Authorization": "Bearer " + token },
+                        contentType: "application/json",
+                        data: JSON.stringify({ listingId }),
+                        success: function (res) {
+                            if (res.status) {
+                                $icon.removeClass("text-secondary").addClass("text-danger");
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: apiBaseUrl + "/Favorite/" + listingId,
+                        method: "DELETE",
+                        headers: { "Authorization": "Bearer " + token },
+                        success: function (res) {
+                            if (res.status) {
+                                $icon.removeClass("text-danger").addClass("text-secondary");
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

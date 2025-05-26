@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"] - Emlak Portalı Yönetim</title>
+
+    <!-- Fonts and Styles -->
+    <link href="~/sbadmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,700" rel="stylesheet">
+    <link href="~/sbadmin/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+
+    <style>
+        /* Modern Sidebar */
+        .bg-custom-dark {
+            background-color: #1f1f2e;
+        }
+
+        .sidebar {
+            transition: all 0.3s ease; /* Yumuşak geçiş */
+        }
+
+            .sidebar.toggled {
+                transition: all 0.3s ease; /* Sidebar küçülürken de yumuşak animasyon */
+            }
+
+            .sidebar .nav-link {
+                color: #c5c6c7;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+
+                .sidebar .nav-link:hover {
+                    background-color: #343a40;
+                    color: #ffffff;
+                    border-radius: 10px;
+                }
+
+                .sidebar .nav-link.active {
+                    background-color: #4e73df;
+                    color: #fff;
+                    border-radius: 10px;
+                }
+
+            .sidebar .sidebar-brand {
+                color: #ffffff;
+                font-weight: bold;
+                font-size: 1.4rem;
+                transition: all 0.3s ease;
+            }
+
+        .sidebar-divider {
+            border-top: 1px solid #c5c6c7;
+        }
+    </style>
+</head>
+
+<body id="page-top">
+    <script src="~/sbadmin/vendor/jquery/jquery.min.js"></script>
+
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-custom-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Admin" asp-action="Index">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-building"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">Real Estate</div>
+            </a>
+
+            <hr class="sidebar-divider">
+
+            <!-- Menü -->
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Admin" asp-action="Index">
+                    <i class="fas fa-columns"></i>
+                    <span>Panel</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Admin" asp-action="Categories">
+                    <i class="fas fa-tags"></i>
+                    <span>Kategoriler</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Admin" asp-action="Listings">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>İlanlar</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Admin" asp-action="Users">
+                    <i class="fas fa-users"></i>
+                    <span>Kullanıcılar</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+
+            <!-- Siteye Dön -->
+            <li class="nav-item mb-3">
+                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Siteye Dön</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggle (Hamburger) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+        </ul>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <ul class="navbar-nav ml-auto" id="adminUserMenu"></ul>
+                </nav>
+
+                <!-- Main Content -->
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto text-center">
+                    <span>&copy; 2025 Çağdaş Kotan - Tüm haklar saklıdır.</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="~/sbadmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/sbadmin/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/sbadmin/js/sb-admin-2.min.js"></script>
+
+    <!-- Kullanıcı Bilgisi -->
+    <script>
+        $(document).ready(function () {
+            var token = localStorage.getItem("token");
+            var userName = localStorage.getItem("userName");
+            var userRole = localStorage.getItem("userRole");
+            var adminUserMenu = $("#adminUserMenu");
+
+            if (token && token !== "") {
+                var displayRole = (userRole === "Uye") ? "Üye" : userRole;
+                var badgeColor = (userRole === "Admin") ? "danger" : "success";
+
+                adminUserMenu.html(`
+                            <li class="nav-item dropdown no-arrow">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="badge badge-${badgeColor} mr-2">${displayRole}</span>
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">${userName}</span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                     aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="#" id="logoutBtn">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Oturumu Kapat
+                                    </a>
+                                </div>
+                            </li>
+                        `);
+
+                if (userRole !== "Admin") {
+                    $('a[href$="/Admin/Categories"]').closest(".nav-item").hide();
+                    $('a[href$="/Admin/Users"]').closest(".nav-item").hide();
+                }
+            } else {
+                window.location.href = "/Login";
+            }
+
+            $(document).on("click", "#logoutBtn", function () {
+                localStorage.removeItem("token");
+                localStorage.removeItem("userName");
+                localStorage.removeItem("userRole");
+                window.location.href = "/Login";
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

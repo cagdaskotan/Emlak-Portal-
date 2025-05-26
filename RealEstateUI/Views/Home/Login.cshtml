@@ -1,0 +1,74 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Giriş";
+
+}
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="col-md-6">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-5">
+                <h2 class="text-center mb-4 fw-bold text-primary">Giriş Yap</h2>
+
+                <form id="loginForm">
+                    <div class="form-group mb-3">
+                        <label for="userName" class="form-label fw-semibold">Kullanıcı Adı</label>
+                        <input type="text" class="form-control rounded-3" id="userName" placeholder="Kullanıcı adınızı girin" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="password" class="form-label fw-semibold">Şifre</label>
+                        <input type="password" class="form-control rounded-3" id="password" placeholder="Şifrenizi girin" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 rounded-3 py-2 fw-bold">Giriş Yap</button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <small class="text-muted">Hesabınız yok mu? <a href="/Register" class="text-decoration-none text-primary">Kayıt Ol</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#loginForm").submit(function (e) {
+                e.preventDefault();
+
+                var userName = $("#userName").val();
+                var password = $("#password").val();
+                var apiBaseUrl = "@ViewBag.ApiBaseURL";
+
+                $.ajax({
+                    url: apiBaseUrl + "/User/Login",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        userName: userName,
+                        password: password
+                    }),
+                    success: function (response) {
+                        if (response.status) {
+                            var data = JSON.parse(response.message);
+
+                            localStorage.setItem("token", data.token);
+                            localStorage.setItem("userName", data.userName);
+                            localStorage.setItem("userRole", data.role);
+                            localStorage.setItem("userId", data.userId);
+
+                            alert("Giriş başarılı!");
+                            window.location.href = "/Admin";
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Giriş işlemi sırasında hata oluştu!");
+                    }
+                });
+            });
+        });
+    </script>
+}

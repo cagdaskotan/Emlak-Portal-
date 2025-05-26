@@ -1,0 +1,118 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Favoriler";
+}
+
+<h1 class="text-center mb-5 fw-bold">Favori İlanlarım</h1>
+
+<div class="container">
+    <div class="row" id="favoritesContainer">
+        <!-- Favori ilanlar burada listelenecek -->
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const apiBaseUrl = "@ViewBag.ApiBaseURL";
+            const token = localStorage.getItem("token");
+
+            if (!token) return alert("Favori ilanları görmek için giriş yapmalısınız.");
+
+            getFavorites();
+
+            function getFavorites() {
+                $.ajax({
+                    url: apiBaseUrl + "/Favorite",
+                    method: "GET",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (data) {
+                        const listings = data.map(f => f.listing);
+                        const favorites = data.map(f => f.listingId);
+                        renderFavorites(listings, favorites);
+                    },
+                    error: function () {
+                        $("#favoritesContainer").html('<div class="alert alert-danger">Favori ilanlar yüklenirken hata oluştu.</div>');
+                    }
+                });
+            }
+
+            function renderFavorites(data, favorites) {
+                let html = "";
+
+                data.forEach(item => {
+                    const isFavorite = favorites.includes(item.id);
+                    const heartIcon = isFavorite ? "text-danger" : "text-secondary";
+
+                    const category = item.category?.name || "";
+                    const city = item.city?.name || "Belirtilmemiş";
+
+                    let categoryBadge = `<span class="badge bg-secondary">${category}</span>`;
+                    if (category.toLowerCase() === "satılık") categoryBadge = `<span class="badge bg-success">Satılık</span>`;
+                    if (category.toLowerCase() === "kiralık") categoryBadge = `<span class="badge bg-primary">Kiralık</span>`;
+
+                    const imageSlides = item.images?.length > 0
+                        ? item.images.map((img, i) => `<div class="carousel-item ${i === 0 ? 'active' : ''}"><img src="${img.imageUrl}" class="d-block w-100" style="aspect-ratio: 16/9; object-fit: cover;" /></div>`).join('')
+                        : `<div class="carousel-item active"><img src="https://via.placeholder.com/400x300?text=No+Image" class="d-block w-100" style="aspect-ratio: 16/9; object-fit: cover;" /></div>`;
+
+                    const sliderControls = item.images?.length > 1
+                        ? `<button class="carousel-control-prev" type="button" data-bs-target="#carousel-${item.id}" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button><button class="carousel-control-next" type="button" data-bs-target="#carousel-${item.id}" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>`
+                        : "";
+
+                    html += `
+                                <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch favorite-card" data-id="${item.id}">
+                                    <div class="card shadow-sm border-0 w-100">
+                                        <div class="overflow-hidden">
+                                            <div id="carousel-${item.id}" class="carousel slide" data-bs-ride="carousel">
+                                                <div class="carousel-inner">${imageSlides}</div>
+                                                ${sliderControls}
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h5 class="card-title mb-0 text-truncate" title="${item.title}">${item.title}</h5>
+                                                <i class="fas fa-heart favorite-btn ${heartIcon}" data-id="${item.id}" style="cursor:pointer;"></i>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center mt-2 mb-2">
+                                                ${categoryBadge}
+                                                <span class="text-muted fw-bold">${item.price} ₺</span>
+                                            </div>
+                                            <p class="text-muted small mb-1"><strong>${city}</strong></p>
+                                            <p class="card-text text-muted small">${item.description?.substring(0, 100)}...</p>
+                                            <a href="/Home/Details?id=${item.id}" class="btn btn-outline-primary btn-sm w-100 mt-2">Detaylar</a>
+                                        </div>
+                                    </div>
+                                </div>`;
+                });
+
+                $("#favoritesContainer").html(html || '<div class="alert alert-info text-center">Favori ilan bulunamadı.</div>');
+            }
+
+            $(document).on("click", ".favorite-btn", function () {
+                const listingId = $(this).data("id");
+                const $card = $(`.favorite-card[data-id='${listingId}']`);
+
+                $.ajax({
+                    url: apiBaseUrl + "/Favorite/" + listingId,
+                    method: "DELETE",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (res) {
+                        if (res.status) {
+                            $card.fadeOut(500, function () {
+                                $card.remove();
+                                if ($("#favoritesContainer .favorite-card").length === 0) {
+                                    $("#favoritesContainer").html('<div class="alert alert-info text-center">Favori ilan bulunamadı.</div>');
+                                }
+                            });
+                        } else {
+                            alert(res.message || "Favori silinemedi.");
+                        }
+                    },
+                    error: function () {
+                        alert("Favoriden çıkarma işlemi başarısız.");
+                    }
+                });
+            });
+        });
+    </script>
+}

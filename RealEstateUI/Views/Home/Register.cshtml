@@ -1,0 +1,110 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Kayıt";
+
+}
+
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh; padding-top: 40px;">
+    <div class="col-md-6">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-5">
+                <h2 class="text-center mb-4 fw-bold text-primary">Kayıt Ol</h2>
+
+                <form id="registerForm" enctype="multipart/form-data">
+                    <div class="form-group mb-3">
+                        <label for="userName">Kullanıcı Adı</label>
+                        <input type="text" class="form-control" id="userName" placeholder="Kullanıcı adınızı girin" required />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="email">E-Posta</label>
+                        <input type="email" class="form-control" id="email" placeholder="E-posta adresinizi girin" required />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="fullName">Ad Soyad</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Adınızı ve soyadınızı girin" required />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="phoneNumber">Telefon Numarası</label>
+                        <input type="text" class="form-control" id="phoneNumber" placeholder="Telefon numaranızı girin" required />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="password">Şifre</label>
+                        <input type="password" class="form-control" id="password" placeholder="Şifrenizi girin" required />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="confirmPassword">Şifre Tekrar</label>
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Şifrenizi tekrar girin" required />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="userPhoto">Profil Fotoğrafı (İsteğe Bağlı)</label>
+                        <input type="file" class="form-control" id="userPhoto" accept="image/*" />
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Kayıt Ol</button>
+                </form>
+
+                <div id="divResult" class="mt-3"></div>
+
+                <div class="text-center mt-4">
+                    <small class="text-muted">Zaten bir hesabınız var mı? <a href="/Login" class="text-decoration-none text-primary">Giriş Yap</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var apiBaseUrl = "@ViewBag.ApiBaseURL";
+
+            $("#registerForm").submit(function (e) {
+                e.preventDefault();
+
+                var password = $("#password").val();
+                var confirmPassword = $("#confirmPassword").val();
+
+                if (password !== confirmPassword) {
+                    ShowResult(false, "Şifreler eşleşmiyor!");
+                    return;
+                }
+
+                var formData = new FormData();
+                formData.append("userName", $("#userName").val());
+                formData.append("email", $("#email").val());
+                formData.append("fullName", $("#fullName").val());
+                formData.append("phoneNumber", $("#phoneNumber").val());
+                formData.append("password", password);
+                if ($('#userPhoto')[0].files.length > 0) {
+                    formData.append("userPhoto", $('#userPhoto')[0].files[0]);
+                }
+
+                $.ajax({
+                    url: apiBaseUrl + "/User/Register",
+                    method: "POST",
+                    headers: {},
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function (response) {
+                        if (response.status) {
+                            ShowResult(true, "Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...");
+                            setTimeout(function () {
+                                window.location.href = "/Login";
+                            }, 2000);
+                        } else {
+                            ShowResult(false, response.message);
+                        }
+                    },
+                    error: function () {
+                        ShowResult(false, "Kayıt sırasında bir hata oluştu!");
+                    }
+                });
+            });
+
+            function ShowResult(status, message) {
+                var css = status ? "alert alert-success" : "alert alert-danger";
+                $("#divResult").removeClass().addClass(css).html(message);
+            }
+        });
+    </script>
+}

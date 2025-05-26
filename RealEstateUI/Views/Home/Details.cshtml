@@ -1,0 +1,357 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Detaylar";
+    var id = Context.Request.Query["id"];
+}
+<style>
+    #commentList .btn {
+        transition: all 0.2s ease;
+    }
+    #commentList .btn:hover {
+        transform: scale(1.05);
+    }
+
+    #imageSlider {
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .card h3 {
+        font-size: 1.8rem;
+    }
+
+    .list-group-item {
+        font-size: 0.95rem;
+        border: none;
+        padding-left: 0;
+    }
+
+    .btn-outline-primary {
+        border-radius: 30px;
+        font-weight: 500;
+    }
+</style>
+<div class="container mt-5">
+    <!-- İlan Detayları -->
+    <div id="listingDetail" class="row mb-5"></div>
+
+    <!-- Yorumlar -->
+    <div class="row">
+        <div class="col-md-8">
+            <h4>Yorumlar</h4>
+            <div id="commentList" class="mb-4"></div>
+
+            <div id="commentFormSection" class="mt-4">
+                <label for="commentContent" class="form-label fw-semibold">Yorumunuzu yazın</label>
+                <textarea id="commentContent" class="form-control shadow-sm border rounded-3" rows="3" placeholder="Bu ilan hakkındaki düşüncelerinizi paylaşın..."></textarea>
+                <button id="btnAddComment" class="btn btn-success mt-2 px-4 rounded-pill">Gönder</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Yorum Düzenleme Modalı -->
+<div class="modal fade" id="editCommentModal" tabindex="-1" aria-labelledby="editCommentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow-sm">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="editCommentModalLabel">Yorumu Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+                <textarea id="editCommentContent" class="form-control" rows="4" placeholder="Yorum içeriğini düzenleyin..."></textarea>
+                <input type="hidden" id="editCommentId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" id="btnUpdateComment">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Yorum Silme Onayı Modalı -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow-sm">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="deleteConfirmLabel">Yorumu Sil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+                Bu yorumu silmek istediğinize emin misiniz?
+                <input type="hidden" id="deleteCommentId" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Vazgeç</button>
+                <button type="button" class="btn btn-danger rounded-pill" id="btnConfirmDelete">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            function showToast(message, type = "success") {
+                Toastify({
+                    text: message,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: type === "success" ? "#28a745" : "#dc3545",
+                    stopOnFocus: true,
+                    className: "rounded"
+                }).showToast();
+            }
+            const apiBaseUrl = "@ViewBag.ApiBaseURL";
+            const token = localStorage.getItem("token");
+            const userName = localStorage.getItem("userName");
+            const listingId = "@id";
+
+            loadDetails();
+            loadComments();
+
+            function loadDetails() {
+                const ajaxOptions = {
+                    url: apiBaseUrl + "/Listing/Public",
+                    method: "GET",
+                    success: function (data) {
+                        const item = data.find(x => x.id == listingId);
+                        if (!item) return;
+
+                        // Giriş yapılmışsa favorileri getir, yapılmamışsa boş dizi
+                        if (token) {
+                            $.ajax({
+                                url: apiBaseUrl + "/Favorite",
+                                method: "GET",
+                                headers: { "Authorization": "Bearer " + token },
+                                success: function (favorites) {
+                                    renderDetail(item, favorites);
+                                }
+                            });
+                        } else {
+                            renderDetail(item, []);
+                        }
+                    }
+                };
+
+                if (token) {
+                    ajaxOptions.headers = { "Authorization": "Bearer " + token };
+                }
+
+                $.ajax(ajaxOptions);
+            }
+
+            function renderDetail(item, favorites) {
+                const isFavorite = favorites.some(f => f.listingId === item.id);
+                const heartIcon = isFavorite ? "text-danger" : "text-secondary";
+
+                const imageSlides = item.images.length > 0 ? item.images.map((img, i) => `
+                        <div class="carousel-item ${i === 0 ? 'active' : ''}">
+                            <img src="${img.imageUrl}" class="d-block w-100" style="aspect-ratio: 16/9; object-fit: cover;" />
+                        </div>`).join('') : `
+                        <div class="carousel-item active">
+                            <img src="https://via.placeholder.com/800x400?text=No+Image" class="d-block w-100" style="aspect-ratio: 16/9; object-fit: cover;" />
+                        </div>`;
+
+                const sliderControls = item.images.length > 1 ? `
+                        <button class="carousel-control-prev" type="button" data-bs-target="#imageSlider" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#imageSlider" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>` : "";
+
+                const html = `
+            <div class="col-md-6">
+                <div id="imageSlider" class="carousel slide rounded shadow-sm mb-4" data-bs-ride="carousel">
+                    <div class="carousel-inner rounded">${imageSlides}</div>
+                    ${sliderControls}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="fw-bold mb-0">${item.title}</h3>
+                        <i class="fas fa-heart favorite-btn ${heartIcon}" data-id="${item.id}" style="cursor:pointer; font-size: 1.5rem;"></i>
+                    </div>
+                    <h5 class="text-success mb-3 fw-bold">${item.price} ₺</h5>
+                    <p class="text-muted mb-3">${item.description}</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><strong>Şehir:</strong> ${item.city?.name || 'Bilinmiyor'}</li>
+                        <li class="list-group-item"><strong>Kategori:</strong> ${item.category?.name || 'Belirtilmemiş'}</li>
+                        <li class="list-group-item"><strong>Telefon:</strong> <span class="text-primary">${item.phoneNumber || 'Belirtilmemiş'}</span></li>
+                        <li class="list-group-item"><strong>Adres:</strong> ${item.address || 'Belirtilmemiş'}</li>
+                    </ul>
+                </div>
+            </div>`;
+
+
+                $("#listingDetail").html(html);
+            }
+
+            function loadComments() {
+                $.ajax({
+                    url: apiBaseUrl + "/Comment/" + listingId,
+                    method: "GET",
+                    success: function (comments) {
+                        let html = comments.map(comment => `
+                                <div class="shadow-sm rounded-3 p-3 mb-3 border position-relative" style="background-color: #fafafa;">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="fw-semibold text-primary">${comment.userName}</div>
+                                        <div class="text-muted small">${new Date(comment.createdAt).toLocaleString()}</div>
+                                    </div>
+                                    <div class="text-dark">${comment.content}</div>
+                                    ${(comment.userName === userName) ? `
+                                        <div class="mt-2 d-flex gap-2">
+                                            <button class="btn btn-sm btn-outline-primary btn-edit" data-id="${comment.id}" data-content="${comment.content}"><i class="fas fa-edit me-1"></i>Düzenle</button>
+                                            <button class="btn btn-sm btn-outline-danger btn-delete" data-id="${comment.id}"><i class="fas fa-trash me-1"></i>Sil</button>
+                                        </div>` : ""}
+                                </div>
+                            `).join('');
+
+                        $("#commentList").html(html || "<p>Henüz yorum yapılmamış.</p>");
+                    }
+                });
+            }
+
+            $(document).on("click", ".btn-delete", function () {
+                const id = $(this).data("id");
+                $("#deleteCommentId").val(id);
+                const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+                modal.show();
+            });
+            $("#btnConfirmDelete").click(function () {
+                const id = $("#deleteCommentId").val();
+
+                $.ajax({
+                    url: apiBaseUrl + "/Comment/" + id,
+                    method: "DELETE",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (res) {
+                        if (res.status) {
+                            loadComments();
+                            bootstrap.Modal.getInstance(document.getElementById('deleteConfirmModal')).hide();
+                            showToast("Yorum silindi");
+                        } else {
+                            showToast(res.message, "error");
+                        }
+                    }
+                });
+            });
+
+
+            $(document).on("click", ".btn-edit", function () {
+                const id = $(this).data("id");
+                const currentContent = $(this).data("content");
+
+                $("#editCommentId").val(id);
+                $("#editCommentContent").val(currentContent);
+                const modal = new bootstrap.Modal(document.getElementById('editCommentModal'));
+                modal.show();
+            });
+            $("#btnUpdateComment").click(function () {
+                const id = $("#editCommentId").val();
+                const updatedContent = $("#editCommentContent").val().trim();
+
+                if (!updatedContent) {
+                    showToast("Yorum içeriği boş olamaz", "error");
+                    return;
+                }
+
+                $.ajax({
+                    url: apiBaseUrl + "/Comment/" + id,
+                    method: "PUT",
+                    headers: { "Authorization": "Bearer " + token },
+                    contentType: "application/json",
+                    data: JSON.stringify({ content: updatedContent }),
+                    success: function (res) {
+                        if (res.status) {
+                            loadComments();
+                            showToast("Yorum güncellendi");
+                            bootstrap.Modal.getInstance(document.getElementById('editCommentModal')).hide();
+                        } else {
+                            showToast(res.message, "error");
+                        }
+                    }
+                });
+            });
+
+
+            $(document).on("click", ".favorite-btn", function () {
+                const $icon = $(this);
+                const id = $icon.data("id");
+                const isFav = $icon.hasClass("text-danger");
+
+                if (!token) return alert("Giriş yapmadan favorilere ekleyemezsiniz.");
+
+                if (!isFav) {
+                    $.ajax({
+                        url: apiBaseUrl + "/Favorite/Add",
+                        method: "POST",
+                        headers: { "Authorization": "Bearer " + token },
+                        contentType: "application/json",
+                        data: JSON.stringify({ listingId: id }),
+                        success: function (res) {
+                            if (res.status) {
+                                $icon.removeClass("text-secondary").addClass("text-danger");
+                                showToast("Favorilere eklendi");
+                            }
+
+                            else alert(res.message);
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: apiBaseUrl + "/Favorite/" + id,
+                        method: "DELETE",
+                        headers: { "Authorization": "Bearer " + token },
+                        success: function (res) {
+                            if (res.status) {
+                                $icon.removeClass("text-danger").addClass("text-secondary");
+                                showToast("Favorilerden çıkarıldı", "error");
+                            }
+
+                        }
+                    });
+                }
+            });
+
+            $("#btnAddComment").click(function () {
+                const content = $("#commentContent").val().trim();
+
+                if (!token) {
+                    alert("Yorum yapabilmek için giriş yapmalısınız.");
+                    return;
+                }
+
+                if (!content) {
+                    alert("Yorum içeriği boş olamaz.");
+                    return;
+                }
+
+                $.ajax({
+                    url: apiBaseUrl + "/Comment/Add",
+                    method: "POST",
+                    headers: { "Authorization": "Bearer " + token },
+                    contentType: "application/json",
+                    data: JSON.stringify({ listingId: listingId, content: content }),
+                    success: function (res) {
+                        if (res.status) {
+                            $("#commentContent").val("");
+                            loadComments();
+                            showToast("Yorum başarıyla eklendi");
+                        } else {
+                            showToast(res.message, "error");
+                        }
+                    },
+                    error: function () {
+                        showToast("Yorum eklenirken bir hata oluştu", "error");
+                    }
+
+                });
+            });
+        });
+    </script>
+
+}

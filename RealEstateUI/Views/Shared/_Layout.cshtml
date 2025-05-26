@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Emlak Portalı</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RealEstateUI.styles.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .nav-link:hover {
+            text-decoration: underline;
+            opacity: 0.85;
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-gradient shadow-lg" style="background: linear-gradient(90deg, #6f42c1, #d63384);">
+            <div class="container">
+                <a class="navbar-brand fw-bold text-black fs-4" asp-area="" asp-controller="Home" asp-action="Index" style="letter-spacing: 1px;">🏠 Emlak Portalı</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <!-- Sol Menü -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Anasayfa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="ListingsAll">Tüm İlanlar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="ListingsSale">Satılık İlanlar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="ListingsRent">Kiralık İlanlar</a>
+                        </li>
+                        <li class="nav-item d-none" id="adminPanelLink">
+                            <a class="nav-link" asp-controller="Admin" asp-action="Index">Admin Paneli</a>
+                        </li>
+                    </ul>
+
+                    <!-- Sağ Menü (Dinamik olarak doldurulacak) -->
+                    <ul class="navbar-nav mb-2 mb-lg-0" id="userMenu"></ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-4">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted mt-5">
+        <div class="container text-center">
+            &copy; 2025 Çağdaş Kotan - Tüm haklar saklıdır.
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        $(document).ready(function () {
+            const apiBaseUrl = "@ViewBag.ApiBaseURL";
+            const token = localStorage.getItem("token");
+            const userName = localStorage.getItem("userName");
+            const userRole = localStorage.getItem("userRole");
+            const userMenu = $("#userMenu");
+            const adminPanelLink = $("#adminPanelLink");
+
+            if (token) {
+                // Profil fotoğrafı çek
+                $.ajax({
+                    url: apiBaseUrl + "/User/List",
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (users) {
+                        const currentUser = users.find(u => u.userName === userName);
+                        const photoUrl = currentUser?.userPhoto || "/UserPhotos/user.png";
+
+                        userMenu.html(`
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img src="${photoUrl}" class="rounded-circle border border-white shadow-sm me-2" width="35" height="35" style="object-fit: cover;" />
+                                            <span>${userName}</span>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow rounded" aria-labelledby="userDropdown">
+                                            <li><a class="dropdown-item" href="/Home/Profile"><i class="fas fa-user me-2"></i>Profil</a></li>
+                                            <li><a class="dropdown-item" href="/Home/Favorites"><i class="fas fa-heart me-2 text-danger"></i>Favorilerim</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Çıkış Yap</a></li>
+                                        </ul>
+                                    </li>
+                                `);
+                    }
+                });
+
+                if (userRole === "Admin" || userRole === "admin") {
+                    adminPanelLink.removeClass("d-none");
+                } else {
+                    $("#adminPanelLink a").text("Kontrol Paneli");
+                    adminPanelLink.removeClass("d-none");
+                }
+            } else {
+                userMenu.html(`
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Login">Giriş Yap</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Register">Kayıt Ol</a>
+                            </li>
+                        `);
+            }
+
+            $(document).on("click", "#logoutBtn", function () {
+                localStorage.clear();
+                window.location.href = "/Login";
+            });
+        });
+    </script>
+    <style>
+        .dropdown-menu {
+            border: none;
+            border-radius: 12px;
+            padding: 10px;
+            min-width: 200px;
+            background: #ffffff;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-item {
+            font-weight: 500;
+            color: #343a40;
+            border-radius: 8px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            will-change: background-color, transform;
+            backface-visibility: hidden;
+        }
+
+            .dropdown-item:hover {
+                background-color: #f1f3f5;
+                color: #0d6efd;
+                transform: translateX(2px);
+                text-decoration: none;
+            }
+
+
+        .dropdown-divider {
+            margin: 6px 0;
+            border-color: #dee2e6;
+        }
+
+    </style>
+</body>
+</html>

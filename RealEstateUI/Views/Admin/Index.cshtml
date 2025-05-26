@@ -1,0 +1,132 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Panel";
+}
+
+<h2 class="text-center fw-bold mb-4">Yönetim Paneli</h2>
+
+<div class="container">
+    <!-- Üstteki Kartlar: İlan, Kategori, Kullanıcı -->
+    <div class="row justify-content-center mb-4" id="topStats"></div>
+
+    <!-- Ortadaki Kartlar: Favori, Yorum -->
+    <div class="row justify-content-center mb-4" id="middleStats"></div>
+
+    <!-- Alt Butonlar: Yeni Ekleme Aksiyonları -->
+    <div class="row justify-content-center" id="actionButtons"></div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const apiBaseUrl = "@ViewBag.ApiBaseURL";
+            const token = localStorage.getItem("token");
+            const role = localStorage.getItem("userRole");
+            const userId = localStorage.getItem("userId");
+            const headers = { "Authorization": "Bearer " + token };
+
+            if (role === "Admin") {
+                $.when(
+                    $.ajax({ url: apiBaseUrl + "/Listing/Public", headers }),
+                    $.ajax({ url: apiBaseUrl + "/Category", headers }),
+                    $.ajax({ url: apiBaseUrl + "/User/List", headers }),
+                    $.ajax({ url: apiBaseUrl + "/Favorite/All", headers }),
+                    $.ajax({ url: apiBaseUrl + "/Comment/All", headers })
+                ).done(function (listingsRes, categoriesRes, usersRes, favoritesRes, commentsRes) {
+                    const listings = listingsRes[0];
+                    const categories = categoriesRes[0];
+                    const users = usersRes[0];
+                    const favorites = favoritesRes[0];
+                    const comments = commentsRes[0];
+
+                    const topCards = `
+                                <div class="col-md-3 mb-4">
+                                    <div class="card border-left-success shadow h-100 py-2">
+                                        <div class="card-body text-center">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Toplam İlan</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">${listings.length}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-4">
+                                    <div class="card border-left-primary shadow h-100 py-2">
+                                        <div class="card-body text-center">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Toplam Kategori</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">${categories.length}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-4">
+                                    <div class="card border-left-warning shadow h-100 py-2">
+                                        <div class="card-body text-center">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Toplam Kullanıcı</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">${users.length}</div>
+                                        </div>
+                                    </div>
+                                </div>`;
+
+                    const middleCards = `
+                                <div class="col-md-3 mb-4">
+                                    <div class="card border-left-danger shadow h-100 py-2">
+                                        <div class="card-body text-center">
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Toplam Favori</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">${favorites.length}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-4">
+                                    <div class="card border-left-info shadow h-100 py-2">
+                                        <div class="card-body text-center">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Toplam Yorum</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">${comments.length}</div>
+                                        </div>
+                                    </div>
+                                </div>`;
+
+                    const actionButtons = `
+                                <div class="col-md-3 mb-4">
+                                    <a href="/Admin/Listings" class="btn btn-outline-success w-100">
+                                        <i class="fas fa-plus-circle me-2"></i> Yeni İlan Ekle
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-4">
+                                    <a href="/Admin/Users" class="btn btn-outline-primary w-100">
+                                        <i class="fas fa-user-plus me-2"></i> Yeni Kullanıcı Ekle
+                                    </a>
+                                </div>`;
+
+                    $("#topStats").html(topCards);
+                    $("#middleStats").html(middleCards);
+                    $("#actionButtons").html(actionButtons);
+                });
+            } else {
+                $.ajax({
+                    url: apiBaseUrl + "/Listing/Public",
+                    headers
+                }).done(function (listings) {
+                    const userListings = listings.filter(l => l.userId === userId);
+                    const topCards = `
+                                <div class="col-md-3 mb-4">
+                                    <div class="card border-left-success shadow h-100 py-2">
+                                        <div class="card-body text-center">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">İlan Sayınız</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">${userListings.length}</div>
+                                        </div>
+                                    </div>
+                                </div>`;
+
+                    const actionButtons = `
+                                <div class="col-md-3 mb-4">
+                                    <a href="/Admin/Listings" class="btn btn-outline-success w-100">
+                                        <i class="fas fa-plus-circle me-2"></i> Yeni İlan Ekle
+                                    </a>
+                                </div>`;
+
+                    $("#topStats").html(topCards);
+                    $("#middleStats").empty();
+                    $("#actionButtons").html(actionButtons);
+                });
+            }
+        });
+    </script>
+}
